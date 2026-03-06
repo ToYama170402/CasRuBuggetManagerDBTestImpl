@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:18.1-trixie
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./docker-entrypoint.initdb.d:/docker-entrypoint-initdb.d"
+      - "bugget_management_system:/var/lib/postgresql"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bugget_management_system
+
+volumes:
+  bugget_management_system:
+
