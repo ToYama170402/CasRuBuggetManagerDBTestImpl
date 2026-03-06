@@ -11,32 +11,49 @@
 
 ```mermaid
 erDiagram
-    groups ||--o{ bugget_application : "belongs to"
-    bugget_application ||--|{ bugget_application_state_history : "has history"
+  groups ||--o{ bugget_application : "belongs to"
+  users ||--o{ bugget_application : "files"
+  bugget_application ||--|{ bugget_application_state_history : "has history"
 
-    groups {
-        int id PK
-        text name UK
-    }
+  groups {
+    int id PK
+    text name UK
+  }
 
-    bugget_application {
-        int id PK
-        int accounting_year
-        int group_id FK
-        int user_id
-        bool is_income
-        text name
-        int amount
-        bytea basis_for_application
-        timestamp_with_time_zone created_at
-    }
+  users {
+    int id PK
+    text discord_id
+    member_role role
+  }
 
-    bugget_application_state_history {
-        int id PK
-        int bugget_application FK
-        bugget_application_state state
-        timestamp_with_time_zone created_at
-    }
+  bugget_application {
+    int id PK
+    int accounting_year
+    int group_id FK
+    int user_id FK
+    bool is_income
+    text name
+    int amount
+    bytea basis_for_application
+    timestamp_with_time_zone created_at
+  }
+
+  bugget_application_state_history {
+    int id PK
+    int bugget_application FK
+    bugget_application_state state
+    timestamp_with_time_zone created_at
+  }
+```
+
+-- 補足: SQLで定義されている列型／列制約
+
+```sql
+-- enum: member_role
+-- 'group_reader', 'accounter', 'club_reader', 'administrater'
+
+-- enum: bugget_application_state
+-- 'checking', 'accepted', 'denied', 'cancelized_acception'
 ```
 
 - `bugget_application`：予算追加/使用の申請を保持
